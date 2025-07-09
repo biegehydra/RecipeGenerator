@@ -1,0 +1,23 @@
+mongo pass: mongodb+srv://tuyentran02:2v2wadr492f26U2P@cluster0.hu7fg2r.mongodb.net/
+
+// Import the functions you need from the SDKs you need
+import { initializeApp } from "firebase/app";
+import { getAnalytics } from "firebase/analytics";
+// TODO: Add SDKs for Firebase products that you want to use
+// https://firebase.google.com/docs/web/setup#available-libraries
+
+// Your web app's Firebase configuration
+// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+const firebaseConfig = {
+  apiKey: "AIzaSyDVCKxWtnD57XJEmlGyClRhdczNA3jeKrg",
+  authDomain: "recipegenerator-d489d.firebaseapp.com",
+  projectId: "recipegenerator-d489d",
+  storageBucket: "recipegenerator-d489d.firebasestorage.app",
+  messagingSenderId: "162862740323",
+  appId: "1:162862740323:web:12a281637e362840e25956",
+  measurementId: "G-C1ESZ70HDZ"
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const analytics = getAnalytics(app);

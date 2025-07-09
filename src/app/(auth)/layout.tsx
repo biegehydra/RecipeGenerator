@@ -23,18 +23,18 @@ export default function AuthLayout({ children }: { children: ReactNode }) {
 
         {/* Footer */}
         <footer className="bg-black text-gray-300">
-      <div className="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8 py-4">
-        <div className="flex flex-col sm:flex-row items-center sm:justify-center gap-4 sm:gap-12">
-          <div>
-            Need Help?&nbsp;
-            <Link href="/contact" className="text-white font-medium transition-colors duration-300 hover:text-gray-300">
-              Contact Us
-            </Link>
+          <div className="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8 py-4">
+            <div className="flex flex-col sm:flex-row items-center sm:justify-center gap-4 sm:gap-12">
+              <div>
+                Need Help?&nbsp;
+                <Link href="/contact" className="text-white font-medium transition-colors duration-300 hover:text-gray-300">
+                  Contact Us
+                </Link>
+              </div>
+              <div>© Ingredient Imposter {new Date().getFullYear()}</div>
+            </div>
           </div>
-          <div>© Social Story Generator 2025</div>
-        </div>
-      </div>
-    </footer>
+        </footer>
       </div>
     </div>
   );

@@ -28,16 +28,23 @@ export default function AppLayout({ children }: { children: ReactNode }) {
             <div className="flex justify-between items-center">
               <div className="flex items-center space-x-8">
                 <Link href="/" className="text-xl font-bold text-gray-900">
-                  Social Story Generator
+                  Ingredient Imposter
                 </Link>
                 {!isPending && session?.user && (
-                  <Link
+                  <><Link
                     href="/upload"
                     className="flex items-center gap-2 text-gray-700 hover:text-gray-900 transition-colors"
                   >
                     <Upload className="w-5 h-5" />
                     <span className="text-sm">Upload</span>
-                  </Link>
+                  </Link><Link
+                    href="/smart-swap"
+                    className="flex items-center gap-2 text-gray-700 hover:text-gray-900 transition-colors"
+                  >
+
+                      <span className="text-sm">Smart Swap</span>
+                    </Link></>
+
                 )}
               </div>
               <Link
@@ -76,7 +83,7 @@ export default function AppLayout({ children }: { children: ReactNode }) {
                   Contact Us
                 </Link>
               </div>
-              <div>© Social Story Generator 2025</div>
+              <div>© Ingredient Imposter {new Date().getFullYear()}</div>
             </div>
           </div>
         </footer>

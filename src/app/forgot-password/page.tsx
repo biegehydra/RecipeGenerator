@@ -138,7 +138,7 @@ export default function ForgotPasswordPage() {
                                     Contact Us
                                 </Link>
                             </div>
-                            <div>© Social Story Generator 2025</div>
+                            <div>© RecipeGenerator 2025</div>
                         </div>
                     </div>
                 </footer>

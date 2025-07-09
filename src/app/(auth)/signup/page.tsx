@@ -8,7 +8,7 @@ export default function SignupPage() {
                     Create an Account
                 </h1>
                 <p className="mt-2 text-center text-sm text-gray-600">
-                    Sign up to start using Social Story Generator
+                    Sign up to start using Ingredient Imposter
                 </p>
             </div>
             <AuthForm mode="signup" />

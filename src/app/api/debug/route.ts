@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 
 export async function GET(request: NextRequest) {
-    // Only return non-sensitive environment variables
     const envVars = {
         NEXT_PUBLIC_BETTER_AUTH_URL: process.env.NEXT_PUBLIC_BETTER_AUTH_URL,
         NEXT_PUBLIC_AUTH_API_URL: process.env.NEXT_PUBLIC_AUTH_API_URL,
@@ -14,11 +13,19 @@ export async function GET(request: NextRequest) {
         NODE_ENV: process.env.NODE_ENV,
     };
 
-    return NextResponse.json({
-        status: 'success',
-        message: 'Environment variables check',
-        env: envVars,
-        timestamp: new Date().toISOString(),
-        host: request.headers.get('host'),
-    });
-} 
+    return NextResponse.json(
+        {
+            status: 'success',
+            message: 'Environment variables check',
+            env: envVars,
+            timestamp: new Date().toISOString(),
+            host: request.headers.get('host'),
+        },
+        {
+            headers: {
+                'Access-Control-Allow-Origin': 'http://192.168.1.191:3000',
+                'Access-Control-Allow-Credentials': 'true',
+            },
+        }
+    );
+}

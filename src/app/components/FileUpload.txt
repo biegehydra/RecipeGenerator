@@ -1,7 +1,8 @@
 'use client';
 
-import { useState, useRef, useCallback } from 'react';
-import LoadingSpinner from './LoadingSpinner';
+import React, { useState, useRef } from 'react';
+import LoadingSpinner from '../components/LoadingSpinner';
+
 
 type FileUploadProps = {
     onFileSelected: (file: File) => Promise<void>;
@@ -15,71 +16,73 @@ export default function FileUpload({ onFileSelected, onError }: FileUploadProps)
     const [errorMessage, setErrorMessage] = useState<string | null>(null);
     const fileInputRef = useRef<HTMLInputElement>(null);
 
-    const validateFile = useCallback((file: File): boolean => {
-        // Check if file is JSON
-        if (!file.type.includes('json') && !file.name.toLowerCase().endsWith('.json')) {
+    const clearError = () => setErrorMessage(null);
+
+    const validateFile = (file: File): boolean => {
+        const isJSON = file.type.includes('json') || file.name.toLowerCase().endsWith('.json');
+        if (!isJSON) {
             const error = 'Only JSON files are allowed';
             setErrorMessage(error);
             onError?.(error);
             return false;
         }
-        setErrorMessage(null);
+        clearError();
         return true;
-    }, [onError]);
+    };
 
-    const handleFileChange = useCallback(async (file: File) => {
-        if (!validateFile(file)) return;
-
-        setFile(file);
+    const handleFileChange = async (selectedFile: File) => {
+        if (!validateFile(selectedFile)) return;
+        setFile(selectedFile);
         setIsUploading(true);
-
         try {
-            await onFileSelected(file);
-        } catch (error) {
-            const errorMsg = error instanceof Error ? error.message : 'Error uploading file';
-            setErrorMessage(errorMsg);
-            onError?.(errorMsg);
+            await onFileSelected(selectedFile);
+        } catch (err) {
+            const msg = err instanceof Error ? err.message : 'Error uploading file';
+            setErrorMessage(msg);
+            onError?.(msg);
         } finally {
             setIsUploading(false);
         }
-    }, [onFileSelected, onError, validateFile]);
+    };
 
-    const handleDragEnter = useCallback((e: React.DragEvent<HTMLDivElement>) => {
+    // Drag and drop handlers
+    const handleDragEnter = (e: React.DragEvent<HTMLDivElement>) => {
         e.preventDefault();
         e.stopPropagation();
         setIsDragging(true);
-    }, []);
-
-    const handleDragLeave = useCallback((e: React.DragEvent<HTMLDivElement>) => {
+    };
+    const handleDragLeave = (e: React.DragEvent<HTMLDivElement>) => {
         e.preventDefault();
         e.stopPropagation();
         setIsDragging(false);
-    }, []);
-
-    const handleDragOver = useCallback((e: React.DragEvent<HTMLDivElement>) => {
+    };
+    const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
         e.preventDefault();
         e.stopPropagation();
-    }, []);
-
-    const handleDrop = useCallback((e: React.DragEvent<HTMLDivElement>) => {
+    };
+    const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
         e.preventDefault();
         e.stopPropagation();
         setIsDragging(false);
 
-        if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+        if (e.dataTransfer.files?.length > 0) {
             const droppedFile = e.dataTransfer.files[0];
             handleFileChange(droppedFile);
+            e.dataTransfer.clearData();
         }
-    }, [handleFileChange]);
+    };
 
+    // Clicking triggers file input
     const handleClick = () => {
-        fileInputRef.current?.click();
+        if (fileInputRef.current) {
+            fileInputRef.current.value = ''; // allow re-selecting same file
+            fileInputRef.current.click();
+        }
     };
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        if (e.target.files && e.target.files.length > 0) {
-            const selectedFile = e.target.files[0];
-            handleFileChange(selectedFile);
+        if (e.target.files?.[0]) {
+            handleFileChange(e.target.files[0]);
         }
     };
 
@@ -110,7 +113,13 @@ export default function FileUpload({ onFileSelected, onError }: FileUploadProps)
                 ) : file ? (
                     <div className="flex flex-col items-center">
                         <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mb-2">
-                            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                className="h-6 w-6 text-blue-600"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                stroke="currentColor"
+                            >
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                             </svg>
                         </div>
@@ -127,24 +136,29 @@ export default function FileUpload({ onFileSelected, onError }: FileUploadProps)
                     </div>
                 ) : (
                     <div className="flex flex-col items-center">
-                        <svg xmlns="http://www.w3.org/2000/svg" className="h-12 w-12 text-gray-400 mb-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            className="h-12 w-12 text-gray-400 mb-3"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
+                        >
+                            <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={2}
+                                d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
+                            />
                         </svg>
                         <p className="mb-2 text-sm font-medium text-gray-900">
-                            Drag and drop your file here or click to upload
+                            Drag and drop your JSON file here or click to upload
                         </p>
-                        <p className="text-xs text-gray-500">
-                            JSON files only
-                        </p>
+                        <p className="text-xs text-gray-500">JSON files only</p>
                     </div>
                 )}
             </div>
 
-            {errorMessage && (
-                <div className="mt-2 text-sm text-red-600">
-                    {errorMessage}
-                </div>
-            )}
+            {errorMessage && <div className="mt-2 text-sm text-red-600">{errorMessage}</div>}
         </div>
     );
-} 
+}

@@ -1,6 +1,6 @@
 import React from 'react';
 import { render, screen, waitFor } from '@testing-library/react';
-import UploadPage from '@/app/(app)/upload/page';
+import UploadPage from '../../app/(app)/upload/page';
 import { authClient } from '@/lib/auth-client';
 
 // Mock the auth-client module
