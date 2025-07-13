@@ -4,7 +4,12 @@ import { useState, useTransition, useEffect } from 'react';
 import * as Select from '@radix-ui/react-select';
 import * as Slider from '@radix-ui/react-slider';
 import { CheckIcon, ChevronDownIcon, ChevronUpIcon } from '@radix-ui/react-icons';
-import { saveSettingsAction } from './actions';
+import { saveSettingsAction } from '../(app)/settings/actions';
+import { useRouter } from 'next/navigation';
+
+
+
+
 
 // Simple utility function for conditional classes
 function cn(...classes: (string | undefined | null | false)[]): string {
@@ -33,7 +38,7 @@ export default function SettingsForm({ initialSettings }: { initialSettings: Set
     const [settings, setSettings] = useState(initialSettings);
     const [isPending, startTransition] = useTransition();
     const [isDirty, setIsDirty] = useState(false);
-
+    const router = useRouter();
     useEffect(() => {
         setIsDirty(JSON.stringify(settings) !== JSON.stringify(initialSettings));
     }, [settings, initialSettings]);
@@ -42,7 +47,8 @@ export default function SettingsForm({ initialSettings }: { initialSettings: Set
         event.preventDefault();
         startTransition(async () => {
             await saveSettingsAction(settings);
-            setIsDirty(false); // Reset dirty state after saving
+            setIsDirty(false);
+            router.push("/smart-swap");
         });
     };
 
@@ -187,4 +193,4 @@ export default function SettingsForm({ initialSettings }: { initialSettings: Set
             </form>
         </div>
     );
-} 
+}

@@ -1,6 +1,6 @@
 import { redirect } from 'next/navigation';
 import { getServerSession } from '@/lib/auth-server-utils';
-import SettingsForm from './SettingsForm';
+import SettingsForm from '../../components/SettingsForm';
 
 export default async function SettingsPage() {
     const session = await getServerSession();
