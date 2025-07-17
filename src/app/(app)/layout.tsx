@@ -9,18 +9,16 @@ import LoadingSpinner from '../components/LoadingSpinner';
 export default function AppLayout({ children }: { children: ReactNode }) {
   const { data: session, isPending } = authClient.useSession();
   return (
-    <div className="min-h-screen bg-gray-50 relative">
-      {/* Grid background pattern */}
-      <div className="absolute inset-0 bg-[#F1F5F9] bg-opacity-90">
-        <div className="absolute inset-0" style={{
-          backgroundImage: `
-            linear-gradient(to right, #e5e7eb 1px, transparent 1px),
-            linear-gradient(to bottom, #e5e7eb 1px, transparent 1px)
-          `,
-          backgroundSize: '4rem 4rem'
-        }} />
-      </div>
-
+    <div
+      style={{
+        backgroundImage: "url('/background.jpg')",
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundRepeat: 'no-repeat',
+        minHeight: '100vh',
+        position: 'relative'
+      }}
+    >
       <div className="relative min-h-screen flex flex-col">
         {/* Header with user info */}
         <header className="bg-white shadow">
@@ -30,9 +28,22 @@ export default function AppLayout({ children }: { children: ReactNode }) {
                 <Link href="/" className="text-xl font-bold text-gray-900">
                   Ingredient Imposter
                 </Link>
-                <Link href="/settings" className="text-sm font-medium text-gray-700 hover:text-gray-900">
-                  Settings
-                </Link>
+                {!isPending && session?.user && (
+                  <><Link
+                    href="/upload"
+                    className="flex items-center gap-2 text-gray-700 hover:text-gray-900 transition-colors"
+                  >
+                    <Upload className="w-5 h-5" />
+                    <span className="text-sm">Upload</span>
+                  </Link><Link
+                    href="/smart-swap"
+                    className="flex items-center gap-2 text-gray-700 hover:text-gray-900 transition-colors"
+                  >
+
+                      <span className="text-sm">Smart Swap</span>
+                    </Link></>
+
+                )}
               </div>
               <Link
                 href="/account"
