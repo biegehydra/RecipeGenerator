@@ -4,7 +4,19 @@ import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { signOut } from '@/lib/auth-client';
 
-function App() {
+interface AppProps {
+    allergies: string[];
+    preferences: {
+        spice_tolerance: number;
+        sweetness_preference: number;
+        saltiness_preference: number;
+        acidity_sourness_preference: number;
+        health_consciousness: number;
+        budget_tolerance: number;
+    } | null;
+}
+
+function App({ allergies, preferences }: AppProps) {
     const router = useRouter();
     const [ingredientInput, setIngredientInput] = useState('');
     const [recipeInput, setRecipeInput] = useState('');
@@ -12,8 +24,7 @@ function App() {
     const [results, setResults] = useState<{ [ingredient: string]: any[] }>({});
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
-    // Allergies and search history state
-    const [allergies, setAllergies] = useState<string[]>([]);
+    // Allergies and preferences now come from props, search history state
     const [searchHistory, setSearchHistory] = useState<{
         ingredient: string;
         date: string;
@@ -21,28 +32,15 @@ function App() {
         allergenInfo?: string;
         substitutes: any[];
     }[]>([]);
-    const [preferences, setPreferences] = useState<any>(null);
     // Track which history entry is selected for viewing
     const [selectedHistoryIdx, setSelectedHistoryIdx] = useState<number | null>(null);
 
-    // Load allergies, search history, and preferences from localStorage on mount
+    // Load search history from localStorage on mount (allergies and preferences now come from props)
     useEffect(() => {
-        const storedAllergies = localStorage.getItem('userAllergies');
-        if (storedAllergies) {
-            try {
-                setAllergies(JSON.parse(storedAllergies));
-            } catch { }
-        }
         const storedHistory = localStorage.getItem('searchHistory');
         if (storedHistory) {
             try {
                 setSearchHistory(JSON.parse(storedHistory));
-            } catch { }
-        }
-        const storedPreferences = localStorage.getItem('userPreferences');
-        if (storedPreferences) {
-            try {
-                setPreferences(JSON.parse(storedPreferences));
             } catch { }
         }
     }, []);
@@ -272,8 +270,8 @@ function App() {
                                         <span key={key} className="flex items-center gap-1 bg-indigo-100 text-indigo-900 px-3 py-1 rounded-full text-sm font-medium">
                                             <span>{meta.emoji}</span>
                                             <span>{meta.label}:</span>
-                                            <span className="font-bold">{preferences[key]}/5</span>
-                                            <span>({getPreferenceLabel(key, preferences[key])})</span>
+                                            <span className="font-bold">{(preferences as any)[key]}/5</span>
+                                            <span>({getPreferenceLabel(key, (preferences as any)[key])})</span>
                                         </span>
                                     ))}
                                 </div>
