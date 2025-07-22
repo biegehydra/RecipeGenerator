@@ -10,9 +10,13 @@ export default async function SettingsPage() {
         redirect('/login');
     }
 
-    // Use user ID or email as identifier
-    const userId = session.user.id || session.user.email;
+    // Use email as primary identifier to ensure consistency
+    // Better-auth typically provides email consistently, while id might be undefined initially
+    const userId = session.user.email || session.user.id;
+    console.log('Settings page - using userId:', userId, 'session.user:', { id: session.user.id, email: session.user.email });
+
     const userSettings = await getUserSettings(userId);
+    console.log('Settings page - retrieved settings:', userSettings);
 
     // Default settings for new users
     const defaultSettings = {

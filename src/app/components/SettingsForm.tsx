@@ -5,10 +5,6 @@ import * as Select from '@radix-ui/react-select';
 import * as Slider from '@radix-ui/react-slider';
 import { CheckIcon, ChevronDownIcon, ChevronUpIcon } from '@radix-ui/react-icons';
 import { saveSettingsAction } from '../(app)/settings/actions';
-import { useRouter } from 'next/navigation';
-
-
-
 
 
 // Simple utility function for conditional classes
@@ -38,7 +34,7 @@ export default function SettingsForm({ initialSettings, userId }: { initialSetti
     const [settings, setSettings] = useState(initialSettings);
     const [isPending, startTransition] = useTransition();
     const [isDirty, setIsDirty] = useState(false);
-    const router = useRouter();
+
     useEffect(() => {
         setIsDirty(JSON.stringify(settings) !== JSON.stringify(initialSettings));
     }, [settings, initialSettings]);
@@ -60,7 +56,6 @@ export default function SettingsForm({ initialSettings, userId }: { initialSetti
             localStorage.setItem('userPreferences', JSON.stringify(preferences));
             await saveSettingsAction({ ...settings, userId });
             setIsDirty(false);
-            router.push("/smart-swap");
         });
     };
 
