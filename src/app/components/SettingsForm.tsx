@@ -34,7 +34,7 @@ type Settings = {
     budget_tolerance: number;
 };
 
-export default function SettingsForm({ initialSettings }: { initialSettings: Settings }) {
+export default function SettingsForm({ initialSettings, userId }: { initialSettings: Settings, userId: string }) {
     const [settings, setSettings] = useState(initialSettings);
     const [isPending, startTransition] = useTransition();
     const [isDirty, setIsDirty] = useState(false);
@@ -58,7 +58,7 @@ export default function SettingsForm({ initialSettings }: { initialSettings: Set
                 budget_tolerance: settings.budget_tolerance
             };
             localStorage.setItem('userPreferences', JSON.stringify(preferences));
-            await saveSettingsAction(settings);
+            await saveSettingsAction({ ...settings, userId });
             setIsDirty(false);
             router.push("/smart-swap");
         });
