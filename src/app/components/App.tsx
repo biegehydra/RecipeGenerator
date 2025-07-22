@@ -176,15 +176,6 @@ function App() {
         }
     };
 
-    const handleLogout = async () => {
-        try {
-            await signOut();
-            router.push('/login');
-        } catch {
-            console.error('Logout failed');
-        }
-    };
-
     // Helper to map preference values to labels and emojis
     const preferenceMeta = {
         spice_tolerance: { label: 'Spice', emoji: '🌶️' },

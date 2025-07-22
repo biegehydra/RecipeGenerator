@@ -12,22 +12,23 @@ export default async function SettingsPage() {
 
     // Use user ID or email as identifier
     const userId = session.user.id || session.user.email;
-    let userSettings = await getUserSettings(userId);
+    const userSettings = await getUserSettings(userId);
 
-    if (!userSettings) {
-        userSettings = {
-            diet: '',
-            allergies: [],
-            spice_tolerance: 3,
-            sweetness_preference: 3,
-            saltiness_preference: 3,
-            acidity_sourness_preference: 3,
-            health_consciousness: 3,
-            budget_tolerance: 3,
-        };
-    }
-    // Remove _id and userId if present (to avoid React warnings)
-    const { _id, userId: _userId, ...rest } = userSettings as any;
+    // Default settings for new users
+    const defaultSettings = {
+        diet: '',
+        allergies: [],
+        spice_tolerance: 3,
+        sweetness_preference: 3,
+        saltiness_preference: 3,
+        acidity_sourness_preference: 3,
+        health_consciousness: 3,
+        budget_tolerance: 3,
+    };
+
+    // Use settings from DB or defaults, then clean them
+    const settingsToUse = userSettings || defaultSettings;
+    const { _id, userId: _userId, ...rest } = settingsToUse as any;
     const cleanSettings: {
         diet: string;
         allergies: string[];

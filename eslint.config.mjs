@@ -16,7 +16,8 @@ const eslintConfig = [
       "react/no-unescaped-entities": "off",
       "@typescript-eslint/no-explicit-any": "off",
       "@typescript-eslint/no-require-imports": "off",
-      "react/display-name": "off"
+      "react/display-name": "off",
+      "@typescript-eslint/no-unused-vars": "off"
     }
   }
 ];
