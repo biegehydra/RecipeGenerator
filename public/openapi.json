@@ -1,0 +1,191 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "IngredientImposter API",
+        "version": "1.0.0",
+        "description": "API for IngredientImposter authentication services"
+    },
+    "servers": [
+        {
+            "url": "http://localhost:3000",
+            "description": "Development server"
+        }
+    ],
+    "paths": {
+        "/api/auth/sign-up/email": {
+            "post": {
+                "summary": "Sign Up",
+                "description": "Register a new user with email and password",
+                "tags": [
+                    "Authentication"
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/SignUpRequest"
+                            },
+                            "example": {
+                                "email": "test@gmail.com",
+                                "password": "Test123!",
+                                "name": "Connor"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful registration",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/AuthResponse"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request - validation error"
+                    },
+                    "409": {
+                        "description": "Conflict - email already exists"
+                    }
+                }
+            }
+        },
+        "/api/auth/sign-in/email": {
+            "post": {
+                "summary": "Sign In",
+                "description": "Authenticate user with email and password",
+                "tags": [
+                    "Authentication"
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/SignInRequest"
+                            },
+                            "example": {
+                                "email": "test@gmail.com",
+                                "password": "Test123!",
+                                "callbackURL": "http://localhost:3000"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful authentication",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/AuthResponse"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized - invalid credentials"
+                    },
+                    "400": {
+                        "description": "Bad request - validation error"
+                    },
+                    "403": {
+                        "description": "Forbidden - invalid callback URL"
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "SignUpRequest": {
+                "type": "object",
+                "required": [
+                    "email",
+                    "password",
+                    "name"
+                ],
+                "properties": {
+                    "email": {
+                        "type": "string",
+                        "format": "email",
+                        "description": "User's email address"
+                    },
+                    "password": {
+                        "type": "string",
+                        "format": "password",
+                        "description": "User's password",
+                        "minLength": 8
+                    },
+                    "name": {
+                        "type": "string",
+                        "description": "User's display name"
+                    }
+                }
+            },
+            "SignInRequest": {
+                "type": "object",
+                "required": [
+                    "email",
+                    "password",
+                    "callbackURL"
+                ],
+                "properties": {
+                    "email": {
+                        "type": "string",
+                        "format": "email",
+                        "description": "User's email address"
+                    },
+                    "password": {
+                        "type": "string",
+                        "format": "password",
+                        "description": "User's password"
+                    },
+                    "callbackURL": {
+                        "type": "string",
+                        "format": "uri",
+                        "description": "URL to redirect after successful authentication. Must be http://localhost:3000 for local development.",
+                        "example": "http://localhost:3000"
+                    }
+                }
+            },
+            "AuthResponse": {
+                "type": "object",
+                "properties": {
+                    "token": {
+                        "type": "string",
+                        "description": "Authentication token"
+                    },
+                    "user": {
+                        "type": "object",
+                        "properties": {
+                            "id": {
+                                "type": "string",
+                                "description": "User's unique identifier"
+                            },
+                            "email": {
+                                "type": "string",
+                                "description": "User's email address"
+                            },
+                            "name": {
+                                "type": "string",
+                                "description": "User's display name"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "securitySchemes": {
+            "bearerAuth": {
+                "type": "http",
+                "scheme": "bearer",
+                "bearerFormat": "JWT"
+            }
+        }
+    }
+}
