@@ -239,19 +239,19 @@ function App() {
                 )}
 
                 <div className="w-full max-w-2xl">
-                    <label className="block text-sm font-semibold mb-2">Ingredient to Substitute:</label>
+                    <label className="block text-sm text-black font-semibold mb-2">Ingredient to Substitute:</label>
                     <div className="flex gap-2 mb-4">
                         <input
                             type="text"
                             value={ingredientInput}
                             onChange={(e) => setIngredientInput(e.target.value)}
-                            className="flex-1 border border-gray-300 rounded px-4 py-2"
+                            className="flex-1 border border-gray-300 rounded px-4 py-2 text-black"
                             placeholder="e.g., Butter"
                             disabled={loading}
                         />
                         <button
                             onClick={handleTextSearch}
-                            className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+                            className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 disabled:opacity-50"
                             disabled={loading || !ingredientInput.trim()}
                         >
                             Submit
@@ -272,7 +272,7 @@ function App() {
                 )}
 
                 {!loading && Object.keys(results).length > 0 && (
-                    <div className="mt-8 w-full max-w-3xl space-y-6">
+                    <div className="mt-8 w-full max-w-3xl text-black space-y-6">
                         {Object.entries(results).map(([ingredient, subs]) => (
                             <div key={ingredient} className="mb-4 p-3 border-l-4 border-blue-500 bg-blue-50 rounded">
                                 <h2 className="font-semibold mb-2">Substitutes for <span className="text-indigo-700">{ingredient}</span>:</h2>
