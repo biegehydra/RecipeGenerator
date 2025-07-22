@@ -7,6 +7,8 @@ import { signOut } from '@/lib/auth-client';
 function App() {
     const router = useRouter();
     const [ingredientInput, setIngredientInput] = useState('');
+    const [recipeInput, setRecipeInput] = useState('');
+    const [swapReason, setSwapReason] = useState('');
     const [results, setResults] = useState<{ [ingredient: string]: any[] }>({});
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
@@ -173,6 +175,10 @@ function App() {
         const trimmed = ingredientInput.trim();
         if (trimmed) {
             findSubstitutes([trimmed]);
+            // Clear all input fields after submitting
+            setIngredientInput('');
+            setRecipeInput('');
+            setSwapReason('');
         }
     };
 
@@ -332,6 +338,34 @@ function App() {
                 )}
 
                 <div className="w-full max-w-2xl">
+                    <label className="block text-sm text-black font-semibold mb-2">Recipe (Optional):</label>
+                    <input
+                        type="text"
+                        value={recipeInput}
+                        onChange={(e) => setRecipeInput(e.target.value)}
+                        className="w-full border border-gray-300 rounded px-4 py-2 text-black mb-4"
+                        placeholder="e.g., Chocolate Chip Cookies, Beef Stew, etc."
+                        disabled={loading}
+                    />
+
+                    <label className="block text-sm text-black font-semibold mb-2">Reason for Swapping:</label>
+                    <select
+                        value={swapReason}
+                        onChange={(e) => setSwapReason(e.target.value)}
+                        className="w-full border border-gray-300 rounded px-4 py-2 text-black mb-4"
+                        disabled={loading}
+                    >
+                        <option value="">Select a reason...</option>
+                        <option value="too-expensive">Too expensive</option>
+                        <option value="too-cheap">Too cheap</option>
+                        <option value="allergy">Allergy</option>
+                        <option value="not-available">Not available/Out of stock</option>
+                        <option value="dietary-restriction">Dietary restriction</option>
+                        <option value="dont-like-taste">Don't like the taste</option>
+                        <option value="healthier-option">Trying to be healthier</option>
+                        <option value="different-flavor">Want different flavor profile</option>
+                    </select>
+
                     <label className="block text-sm text-black font-semibold mb-2">Ingredient to Substitute:</label>
                     <div className="flex gap-2 mb-4">
                         <input
